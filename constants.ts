@@ -140,5 +140,5 @@ export const LINKS = {
   github: "https://github.com/hirendra84",
   linkedin: "https://www.linkedin.com/in/hirendra84ya/",
   fiverr: "https://fiverr.com",
-  resume: "/resume.pdf"
+  resume: "/Hirendra_resume.pdf"
 };

@@ -5,7 +5,7 @@ import Konami from './components/EasterEgg/Konami';
 import { RESUME_CONTENT, GIGS, LINKS } from './constants';
 import { Github, Linkedin, FileText, Mail, ExternalLink, Moon, Sun, Code, Terminal, Cpu, Download } from 'lucide-react';
 
-const NavBar = () => {
+const NavBar = ({ onOpenResume }: { onOpenResume: (e: React.MouseEvent) => void }) => {
   const { theme, toggleTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -32,7 +32,7 @@ const NavBar = () => {
         <div className="flex items-center gap-6">
           <ul className="hidden md:flex gap-6 font-medium text-sm">
             <li><a href="#about" className="hover:text-primary transition-colors">About</a></li>
-            <li><a href="#resume" className="hover:text-primary transition-colors">Resume</a></li>
+            <li><button onClick={onOpenResume} className="hover:text-primary transition-colors cursor-pointer bg-transparent border-0 outline-none">Resume</button></li>
             <li><a href="#gigs" className="hover:text-primary transition-colors">Services</a></li>
           </ul>
           
@@ -53,7 +53,7 @@ const NavBar = () => {
   );
 };
 
-const HeroSection = () => {
+const HeroSection = ({ onOpenResume }: { onOpenResume: (e: React.MouseEvent) => void }) => {
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -112,9 +112,9 @@ const HeroSection = () => {
           </p>
           
           <div className="flex flex-wrap gap-4">
-             <a href={LINKS.resume} download className="flex items-center gap-2 px-6 py-3 bg-slate-200 dark:bg-slate-800 rounded-2xl font-semibold hover:bg-slate-300 dark:hover:bg-slate-700 transition-all">
+             <button onClick={onOpenResume} className="flex items-center gap-2 px-6 py-3 bg-slate-200 dark:bg-slate-800 rounded-2xl font-semibold hover:bg-slate-300 dark:hover:bg-slate-700 transition-all cursor-pointer border-0 outline-none">
                <FileText size={18} /> View Resume (PDF)
-             </a>
+             </button>
              <a href="#gigs" className="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-2xl font-semibold hover:bg-blue-600 shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-1">
                Hire Me / Gigs
              </a>
@@ -293,108 +293,7 @@ const TechStackSection = () => {
   );
 };
 
-const ResumeSection = () => {
-    return (
-      <section id="resume" className="py-24 bg-slate-50 dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
-        <div className="container mx-auto px-6">
-          <div className="max-w-5xl mx-auto">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-primary/10 rounded-xl text-primary">
-                  <FileText size={24} />
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Technical Summary</h2>
-                  <p className="text-slate-500">Engineering Approach & Outcomes</p>
-                </div>
-              </div>
-              <a href={LINKS.resume} download className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg font-medium text-sm hover:border-primary transition-colors shadow-sm">
-                  <Download size={16} /> Download PDF
-              </a>
-            </div>
-  
-            <div className="bg-white dark:bg-slate-950 rounded-xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 font-mono text-sm md:text-base">
-              {/* Terminal Header */}
-              <div className="bg-slate-100 dark:bg-slate-900 px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-400/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-400/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-400/80"></div>
-                </div>
-                <div className="text-xs text-slate-400 font-sans">resume_abstract.md</div>
-                <div className="w-10"></div> {/* Spacer */}
-              </div>
-  
-              {/* Code Content */}
-              <div className="p-6 md:p-10 space-y-8">
-                 <div className="grid md:grid-cols-1 gap-8">
-                    
-                    <div className="relative pl-6 border-l-2 border-primary/30 hover:border-primary transition-colors">
-                        <h3 className="text-primary font-bold mb-2 flex items-center gap-2">
-                            <span className="text-slate-400 select-none">01</span> //SKILLS
-                        </h3>
-                        <div className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                          {RESUME_CONTENT.skills.map(section => (
-                            <div key={section.category} className="mb-2">
-                              <span className="font-bold">{section.category}:</span> {section.items.join(', ')}
-                            </div>
-                          ))}
-                        </div>
-                    </div>
-
-                    <div className="relative pl-6 border-l-2 border-secondary/30 hover:border-secondary transition-colors">
-                        <h3 className="text-secondary font-bold mb-2 flex items-center gap-2">
-                            <span className="text-slate-400 select-none">02</span> // EDUCATION
-                        </h3>
-                        <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                            {RESUME_CONTENT.education}
-                        </p>
-                    </div>
-
-                    <div className="relative pl-6 border-l-2 border-blue-500/30 hover:border-blue-500 transition-colors">
-                        <h3 className="text-blue-500 font-bold mb-2 flex items-center gap-2">
-                            <span className="text-slate-400 select-none">03</span> // PROJECTS
-                        </h3>
-                        <div className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                          {RESUME_CONTENT.projects.map(p => (
-                            <div key={p.title} className="mb-2">
-                              <span className="font-bold">{p.title}</span>: {p.description}
-                            </div>
-                          ))}
-                        </div>
-                    </div>
-
-                    <div className="relative pl-6 border-l-2 border-purple-500/30 hover:border-purple-500 transition-colors">
-                        <h3 className="text-purple-500 font-bold mb-2 flex items-center gap-2">
-                            <span className="text-slate-400 select-none">04</span> // EXPERIENCE
-                        </h3>
-                        <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                            {RESUME_CONTENT.experience}
-                        </p>
-                    </div>
-                    <div className="relative pl-6 border-l-2 border-purple-500/30 hover:border-purple-500 transition-colors">
-                        <h3 className="text-purple-500 font-bold mb-2 flex items-center gap-2">
-                            <span className="text-slate-400 select-none">05</span> // INTERESTS
-                        </h3>
-                        <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                            {RESUME_CONTENT.interests}
-                        </p>
-                    </div>
-
-                 </div>
-                 
-                 <div className="pt-4 border-t border-slate-100 dark:border-slate-800 text-slate-400 text-xs flex gap-4">
-                    <span>Ln 42, Col 12</span>
-                    <span>UTF-8</span>
-                    <span>Markdown</span>
-                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-};
+/* Removed ResumeSection */
 
 const ServicesSection = () => {
   return (
@@ -545,20 +444,58 @@ const Footer = () => {
 }
 
 const App: React.FC = () => {
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+
+  const handleOpenResume = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResumeOpen(true);
+  };
+
   return (
     <ThemeProvider>
       <div className="min-h-screen">
         <Konami />
-        <NavBar />
+        <NavBar onOpenResume={handleOpenResume} />
         <main>
-            <HeroSection />
+            <HeroSection onOpenResume={handleOpenResume} />
             <AboutSection />
             <TechStackSection />
-            <ResumeSection />
             <ServicesSection />
             <ContactSection />
         </main>
         <Footer />
+        
+        {isResumeOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 md:p-8" onClick={() => setIsResumeOpen(false)}>
+            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl w-full max-w-5xl h-full flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800">
+                <h3 className="text-xl font-bold font-sans flex items-center gap-2"><FileText size={20} className="text-primary"/> Resume</h3>
+                <div className="flex items-center gap-4">
+                  <a href={LINKS.resume} download className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary hover:bg-primary/20 rounded-lg text-sm font-medium transition-colors">
+                    <Download size={16} /> Download
+                  </a>
+                  <button onClick={() => setIsResumeOpen(false)} className="text-slate-500 hover:text-slate-800 dark:hover:text-white p-1">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div className="flex-1 bg-slate-100 dark:bg-slate-950 p-2 md:p-4 rounded-b-xl overflow-hidden">
+                <object
+                  data={`${LINKS.resume}#view=FitH`}
+                  type="application/pdf"
+                  className="w-full h-full rounded shadow-inner"
+                >
+                  <div className="flex flex-col items-center justify-center h-full gap-4 text-slate-500">
+                    <p>It appears your browser doesn't support built-in PDFs.</p>
+                    <a href={LINKS.resume} download className="px-4 py-2 bg-primary text-white rounded-lg">
+                      Download PDF Instead
+                    </a>
+                  </div>
+                </object>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </ThemeProvider>
   );
