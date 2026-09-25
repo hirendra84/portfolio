@@ -4,6 +4,8 @@ import Scene from './components/Hero/Scene';
 import Konami from './components/EasterEgg/Konami';
 import { RESUME_CONTENT, GIGS, LINKS } from './constants';
 import { Github, Linkedin, FileText, Mail, ExternalLink, Moon, Sun, Code, Terminal, Cpu, Download } from 'lucide-react';
+import ProjectsSection from './components/Projects';
+import CertificationsSection from './components/Certifications';
 
 const NavBar = ({ onOpenResume }: { onOpenResume: (e: React.MouseEvent) => void }) => {
   const { theme, toggleTheme } = useTheme();
@@ -32,6 +34,7 @@ const NavBar = ({ onOpenResume }: { onOpenResume: (e: React.MouseEvent) => void 
         <div className="flex items-center gap-6">
           <ul className="hidden md:flex gap-6 font-medium text-sm">
             <li><a href="#about" className="hover:text-primary transition-colors">About</a></li>
+            <li><a href="#projects" className="hover:text-primary transition-colors">Projects</a></li>
             <li><button onClick={onOpenResume} className="hover:text-primary transition-colors cursor-pointer bg-transparent border-0 outline-none">Resume</button></li>
             <li><a href="#gigs" className="hover:text-primary transition-colors">Services</a></li>
           </ul>
@@ -161,6 +164,10 @@ If something looks smooth, scalable, and a little magical — I probably built i
 If it breaks… let's just say the AI and I are still discussing whose fault that was."
              </p>
 
+             <p className="mt-4 mb-6 text-slate-600 dark:text-slate-400 font-medium">
+               Want to see my code? Check out my repositories and open-source contributions on <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-bold inline-flex items-center gap-1">GitHub <Github size={16} /></a>.
+             </p>
+
              <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 mb-6">
                <h3 className="text-sm font-bold flex items-center gap-2 mb-4 uppercase tracking-wider text-slate-400">
                  <Code size={16} /> Programming Languages
@@ -246,10 +253,22 @@ const TECH_STACK = [
   { name: 'AWS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg', category: 'Tools' },
   { name: 'Linux', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg', category: 'Tools' },
   { name: 'Figma', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg', category: 'Tools' },
+  
+  // AI & ML
+  { name: 'OpenAI (Codex)', icon: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg', category: 'AI & ML' },
+  { name: 'Claude', icon: 'https://cdn.simpleicons.org/anthropic/D97757', category: 'AI & ML' },
+  { name: 'Copilot', icon: 'https://cdn.simpleicons.org/githubcopilot/8250DF', category: 'AI & ML' },
+  { name: 'Gemini', icon: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg', category: 'AI & ML' },
+  { name: 'Hugging Face', icon: 'https://huggingface.co/front/assets/huggingface_logo-noborder.svg', category: 'AI & ML' },
+  { name: 'LangChain', icon: 'https://cdn.simpleicons.org/langchain/22C55E', category: 'AI & ML' },
+  { name: 'LangGraph', icon: 'https://cdn.simpleicons.org/langgraph/22C55E', category: 'AI & ML' },
+  { name: 'Vector DBs', icon: 'https://cdn.simpleicons.org/qdrant/E3224B', category: 'AI & ML' },
+  { name: 'TensorFlow', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg', category: 'AI & ML' },
+  { name: 'PyTorch', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg', category: 'AI & ML' },
 ];
 
 const TechStackSection = () => {
-  const categories = ['Languages', 'Frontend', 'Backend', 'Tools'];
+  const categories = ['Languages', 'Frontend', 'Backend', 'Tools', 'AI & ML'];
   
   return (
     <section className="py-24 bg-slate-50 dark:bg-slate-950">
@@ -460,6 +479,8 @@ const App: React.FC = () => {
             <HeroSection onOpenResume={handleOpenResume} />
             <AboutSection />
             <TechStackSection />
+            <ProjectsSection />
+            <CertificationsSection />
             <ServicesSection />
             <ContactSection />
         </main>
