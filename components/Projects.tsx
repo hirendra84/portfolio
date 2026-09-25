@@ -34,11 +34,6 @@ const FEATURED_ORDER = [
     demoUrl: 'https://smartcourse-chooser.streamlit.app/', 
     description: 'A Machine Learning based course recommendation system.' 
   },
-  { 
-    match: 'free_for_student', 
-    demoUrl: 'https://free-for-students.vercel.app', 
-    description: 'A curated list of free tools and resources for students.' 
-  },
   {
     match: '90dayprep',
     demoUrl: 'https://90dayprep.vercel.app',
@@ -64,7 +59,7 @@ const ProjectCard = ({ repo, isFeatured, customData }: { repo: Repo, isFeatured:
     >
       {/* Thumbnail Section */}
       {overrideImage ? (
-        <div className="relative w-full aspect-[4/3] overflow-hidden z-10 shrink-0">
+        <div className="relative w-full aspect-video overflow-hidden z-10 shrink-0">
           <img 
             alt={`${repo.name} Thumbnail`} 
             className="w-full h-full object-cover transition-all duration-400 ease-in-out group-hover:scale-105" 
@@ -95,7 +90,7 @@ const ProjectCard = ({ repo, isFeatured, customData }: { repo: Repo, isFeatured:
           </div>
         </div>
       ) : hasLivePreview ? (
-        <div className="relative w-full aspect-[4/3] overflow-hidden z-10 shrink-0 bg-slate-900">
+        <div className="relative w-full aspect-video overflow-hidden z-10 shrink-0 bg-slate-900">
           <div className="absolute inset-0 w-[200%] h-[200%] origin-top-left scale-50 pointer-events-none transition-transform duration-700 ease-in-out group-hover:scale-[0.52]">
             <iframe 
               src={demoUrl} 
@@ -127,7 +122,7 @@ const ProjectCard = ({ repo, isFeatured, customData }: { repo: Repo, isFeatured:
           </div>
         </div>
       ) : (
-        <div className="relative w-full aspect-[4/3] overflow-hidden z-10 shrink-0 bg-gradient-to-br from-primary/80 to-slate-800 dark:to-slate-950 flex items-center justify-center">
+        <div className="relative w-full aspect-video overflow-hidden z-10 shrink-0 bg-gradient-to-br from-primary/80 to-slate-800 dark:to-slate-950 flex items-center justify-center">
           {/* Large Background Text Initial */}
           <span className="text-9xl font-black text-white/10 dark:text-white/5 select-none group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 ease-out">
             {repo.name.substring(0, 2).toUpperCase()}
