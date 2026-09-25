@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Github, ExternalLink, Star, GitFork, Calendar, Code, Activity, Loader2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Github, ExternalLink, Star, GitFork, Calendar, Code, Activity, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Repo {
   id: number;
@@ -278,15 +278,25 @@ export const ProjectsSection = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showMore, setShowMore] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const { clientWidth } = scrollRef.current;
+      const scrollAmount = direction === 'left' ? -(clientWidth / 1.5) : clientWidth / 1.5;
+      scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     const fetchRepos = async () => {
+      const cacheKey = `github_repos_${GITHUB_USERNAME}`;
       try {
-        const cacheKey = `github_repos_${GITHUB_USERNAME}`;
-        const cachedData = sessionStorage.getItem(cacheKey);
-        const cacheTime = sessionStorage.getItem(`${cacheKey}_time`);
+        const cachedData = localStorage.getItem(cacheKey);
+        const cacheTime = localStorage.getItem(`${cacheKey}_time`);
         
-        if (cachedData && cacheTime && (Date.now() - parseInt(cacheTime) < 3600000)) {
+        // Cache for 24 hours (86400000 ms) instead of 1 hour
+        if (cachedData && cacheTime && (Date.now() - parseInt(cacheTime) < 86400000)) {
           setRepos(JSON.parse(cachedData));
           setLoading(false);
           return;
@@ -299,14 +309,21 @@ export const ProjectsSection = () => {
         const data: Repo[] = await response.json();
         const validRepos = data.filter(repo => !repo.fork && repo.name !== GITHUB_USERNAME);
         
-        sessionStorage.setItem(cacheKey, JSON.stringify(validRepos));
-        sessionStorage.setItem(`${cacheKey}_time`, Date.now().toString());
+        localStorage.setItem(cacheKey, JSON.stringify(validRepos));
+        localStorage.setItem(`${cacheKey}_time`, Date.now().toString());
         
         setRepos(validRepos);
         setLoading(false);
       } catch (err) {
-        console.error(err);
-        setError('Failed to load projects from GitHub. Please try again later.');
+        console.warn('GitHub API rate limit hit or offline. Using fallback data.', err);
+        const cachedData = localStorage.getItem(cacheKey);
+        if (cachedData) {
+          // Graceful fallback to expired cache if available
+          setRepos(JSON.parse(cachedData));
+        } else {
+          // Fallback to empty array; getCategorizedRepos will auto-mock the featured projects!
+          setRepos([]);
+        }
         setLoading(false);
       }
     };
@@ -376,6 +393,22 @@ export const ProjectsSection = () => {
               A collection of my most significant production builds and tools.
             </p>
           </div>
+          <div className="flex items-center gap-3 hidden md:flex">
+            <button 
+              onClick={() => scroll('left')}
+              className="p-3 rounded-full bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:text-white transition-all shadow-sm border border-slate-200 dark:border-slate-800"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button 
+              onClick={() => scroll('right')}
+              className="p-3 rounded-full bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:text-white transition-all shadow-sm border border-slate-200 dark:border-slate-800"
+              aria-label="Scroll right"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
         </div>
 
         {error ? (
@@ -383,22 +416,25 @@ export const ProjectsSection = () => {
             <p>{error}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          <div 
+            ref={scrollRef}
+            className="flex overflow-x-auto gap-6 lg:gap-8 pb-8 snap-x snap-mandatory hide-scrollbar scroll-smooth"
+          >
             {loading ? (
               <>
-                <ProjectSkeleton />
-                <ProjectSkeleton />
-                <ProjectSkeleton />
-                <ProjectSkeleton />
+                <div className="w-[90vw] sm:w-[70vw] md:w-[48vw] lg:w-[45%] shrink-0 snap-center"><ProjectSkeleton /></div>
+                <div className="w-[90vw] sm:w-[70vw] md:w-[48vw] lg:w-[45%] shrink-0 snap-center"><ProjectSkeleton /></div>
+                <div className="w-[90vw] sm:w-[70vw] md:w-[48vw] lg:w-[45%] shrink-0 snap-center"><ProjectSkeleton /></div>
               </>
             ) : (
               featured.map((item) => (
-                <ProjectCard 
-                  key={item.repo.id} 
-                  repo={item.repo} 
-                  isFeatured={true}
-                  customData={item.customData}
-                />
+                <div key={item.repo.id} className="w-[90vw] sm:w-[70vw] md:w-[48vw] lg:w-[45%] shrink-0 snap-center transform transition-all duration-300">
+                  <ProjectCard 
+                    repo={item.repo} 
+                    isFeatured={true}
+                    customData={item.customData}
+                  />
+                </div>
               ))
             )}
           </div>
